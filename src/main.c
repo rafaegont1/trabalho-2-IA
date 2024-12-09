@@ -72,11 +72,11 @@ int main()
     while (!p_queue_empty(&pq)) {
         current = *p_queue_pop(&pq);
 
-#if defined(A_STAR) // rascunho
-        printf("-> %c: %d = %d + %d\n", INT2CHAR(current.idx), current.score.f, current.score.g, current.score.h); // rascunho
-#elif defined(GBS) // rascunho
-        printf("-> %c: %d\n", INT2CHAR(current.idx), current.score); // rascunho
-#endif // rascunho
+#if defined(A_STAR) && defined(DEBUG)
+        printf("-> %c: %d = %d + %d\n", INT2CHAR(current.idx), current.score.f, current.score.g, current.score.h);
+#elif defined(GBS) && defined(DEBUG)
+        printf("-> %c: %d\n", INT2CHAR(current.idx), current.score);
+#endif
 
         if (INT2CHAR(current.idx) == GOAL_CELL) break;
 
@@ -97,6 +97,7 @@ int main()
                     manhattan_distance(neighbor.idx, CHAR2INT(GOAL_CELL));
 #endif
                 p_queue_set(&pq, neighbor);
+                matrix[neighbor.idx].came_from = current.idx;
             }
         }
 
@@ -114,6 +115,8 @@ int main()
     printf("Time spent: %lld ns\n", delta_ns(start, end));
     size_t nodes_size = sizeof(p_queue_node_t) * pq.base.nodes_allocated;
     printf("Memory spend with nodes allocated: %ld bytes\n", nodes_size);
+
+    matrix_print_path(matrix);
 
     p_queue_deinit(&pq);
 

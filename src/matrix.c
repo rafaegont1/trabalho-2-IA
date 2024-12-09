@@ -106,3 +106,38 @@ int manhattan_distance(int from, int to)
 
     return abs(x1 - x2) + abs(y1 - y2);
 }
+
+void matrix_print_path(const cell_t * matrix)
+{
+    printf("Reconstructing path...\n");
+    char path[MAT_SIZE];
+    int path_idx = 0;
+    char current = GOAL_CELL;
+
+    if (matrix[CHAR2INT(current)].came_from == -1) {
+        printf("Goal cell %c is unreachable\n", GOAL_CELL);
+        return;
+    }
+
+    while (current != START_CELL) {
+        path[path_idx++] = current;
+        
+        int current_idx = CHAR2INT(current);
+        
+        int pred = matrix[current_idx].came_from;
+        if (pred == -1) {
+            printf("No predecessor for %c, path reconstruction failed\n", current);
+            return;
+        }
+
+        current = INT2CHAR(pred);
+    }
+
+    path[path_idx++] = START_CELL;
+
+    printf("Path found: ");
+    for (int i = path_idx - 1; i >= 0; i--) {
+        printf("%c ", path[i]);
+    }
+    printf("\n");
+}

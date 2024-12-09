@@ -10,6 +10,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Default to C11
 set(CMAKE_C_STANDARD 11)
 
+# Adding macro definitions for debug
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG -DA_STAR -DGBS)
+endif()
+
 # Include headers from the 'include' directory
 include_directories(${CMAKE_SOURCE_DIR}/include)
 

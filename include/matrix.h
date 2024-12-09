@@ -23,5 +23,6 @@ typedef struct {
 void matrix_init(cell_t *matrix);
 // void matrix_print_path(const cell_t *matrix);
 int manhattan_distance(int from, int to);
+void matrix_print_path(const cell_t * matrix);
 
 #endif // CELL_H
