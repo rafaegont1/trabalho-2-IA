@@ -1,30 +1,42 @@
-# Algoritmos BFS e DFS
-
-Este projeto implementa os algoritmos de **Busca em Largura (BFS)** e **Busca em Profundidade (DFS)**, desenvolvidos em C. Este README explica como cada algoritmo funciona e apresenta as principais diferenças entre eles. 
+# Algoritmos A* e Guloso
+Este projeto implementa os algoritmos de **Busca A*** e **Busca Gulosa**, desenvolvidos em C. Este README explica como cada algoritmo funciona e apresenta as principais diferenças entre eles. 
 
 ---
 
-## 📖 Busca em Largura (BFS)
+## 📖 A*
 
 ### O que é?
-A **Busca em Profundidade (Depth-First Search)** é um algoritmo que explora os caminhos de um grafo ou árvore profundamente antes de retroceder. Ele utiliza o conceito de recursão ou uma pilha para gerenciar os vértices visitados.
+O A* é um algoritmo de busca heurística amplamente utilizado em problemas de caminho mínimo. Ele combina o custo acumulado para chegar a um nó e uma estimativa heurística do custo para alcançar o objetivo, garantindo eficiência e precisão na busca.
 
 ### 🔧 Funcionamento
-1. Inicia no nó inicial e o marca como visitado.
-2. Insere o nó inicial em uma **fila**.
-3. Enquanto a fila não estiver vazia:
-   - Remove o nó da frente da fila.
-   - Visita todos os vizinhos não visitados, marca-os como visitados e os adiciona à fila.
+1. Inicia no nó inicial e o adiciona à lista **aberta** (nós a serem explorados), com um custo acumulado `g(n)` igual a zero.
+2. Enquanto a lista **aberta** não estiver vazia:
+   - Seleciona o nó com o menor valor de `f(n) = g(n) + h(n)` na lista **aberta**.
+   - Move o nó selecionado para a lista **fechada** (nós já explorados).
+   - Se o nó selecionado for o objetivo, termina o algoritmo e retorna o caminho.
+   - Para cada vizinho do nó atual:
+     - Calcula `g(n)` como o custo acumulado desde o início.
+     - Calcula `f(n)` como `g(n) + h(n)`, onde `h(n)` é o valor estimado da heurística.
+     - Se o vizinho não estiver na lista **aberta** ou **fechada**, adiciona-o à lista **aberta**.
   
-## 📖 Busca em Prorundidade (DFS)
+## 📖 Busca Gulosa (GBS)
 
 ### O que é?
-A **Busca em Largura (Breadth-First Search)** é um algoritmo que explora os vértices de um grafo em níveis, visitando primeiro os nós mais próximos do nó inicial antes de avançar para os mais distantes.
+A **Busca Gulosa** é um algoritmo de busca heurística que sempre escolhe o próximo passo baseado na heurística `h(n)` de menor custo, priorizando a solução mais promissora em cada etapa. Ela é chamada "gulosa" porque tenta alcançar o objetivo o mais rápido possível, sem considerar o custo acumulado.
 
-### 🔧 Funcionamento
-1. Começa no nó inicial e o marca como visitado.
-2. Explora recursivamente (ou utilizando uma pilha) os vizinhos não visitados do nó atual até atingir um vértice sem vizinhos não visitados.
-3. Retrocede para continuar explorando outros caminhos.
+---
+
+## 🔧 Funcionamento
+
+1. Inicia no nó inicial e o adiciona à lista **aberta** (nós a serem explorados).
+2. Enquanto a lista **aberta** não estiver vazia:
+   - Seleciona o nó com o menor valor de `h(n)` na lista **aberta**.
+   - Remove o nó da lista **aberta** e o adiciona à lista **fechada** (nós já explorados).
+   - Se o nó selecionado for o objetivo, termina o algoritmo e retorna o caminho.
+   - Para cada vizinho do nó atual:
+     - Calcula o valor de `h(n)` para o vizinho.
+     - Se o vizinho não estiver na lista **aberta** ou **fechada**, adiciona-o à lista **aberta**.
+     - Caso o vizinho já esteja na lista **aberta** com um custo maior, atualiza o nó pai e recalcula `h(n)`.
 
 ## Tempo de Execução ⏰
 
@@ -32,114 +44,103 @@ Foi utilizada a função `clock_gettime()`, pertencente a biblioteca `GNU C Libr
 
 Os testes foram feitos num notebook *ACER Nitro 5*(GTX 1650 - Intel Core i5 i5 - 16gb ram).
 
-- `BFS`
-  - O tempo de execução foi 495500 ns (0,0004975 segundos).
-- `DFS`
-  - O tempo de execução foi 541800 ns (0,0005418 segundos).
+- `A*`
+  - O tempo de execução foi 4800 ns.
+- `GBS`
+  - O tempo de execução foi 4500 ns.
 #### **Conclusões sobre os tempos**
 
-O algoritmo BFS pode ser considerado mais "estável" no labirinto comparado. Os tempos de execução medidos tinham variações superiores a 0,0003 segundos, enquanto o DFS é bem menos previsível, tendo medições muito mais rápidas, como 0,0002 segundos e também muito mais demoradas, como 0,0008 segundos.
+A **Busca Gulosa (GBS)** é mais rápida que o **A*** porque toma decisões exclusivamente com base na heurística `(h(n))`, priorizando o próximo nó que parece estar mais próximo do objetivo sem considerar o custo acumulado do caminho `(g(n))`. Isso reduz significativamente a complexidade computacional em cada etapa, pois o algoritmo realiza menos cálculos e atualizações, além de simplificar a organização na fila de prioridade. Por outro lado, o **A*** precisa calcular a função total de custo `(f(n) = g(n) + h(n))` para cada nó, o que exige mais operações matemáticas e atualizações frequentes na fila, tornando-o mais lento em comparação. Essa simplicidade da **GBS** é o principal motivo para seu desempenho mais rápido no labirinto trabalhado.
 
 ## Custo e Consumo de Memória 🧠
 
-#### **Busca em Largura (BFS)**
-O consumo de memória do BFS depende diretamente da **estrutura de dados usada (fila)** e do número de vértices no **nível mais amplo do grafo**. 
+#### **A***  
+O consumo de memória do A* é diretamente influenciado pela **estrutura de dados utilizada (fila de prioridade)** e pela quantidade de nós que ele mantém em memória para calcular o custo total `f(n) = g(n) + h(n)`.
 
-1. **Estrutura usada**: 
-   - O BFS utiliza uma **fila (FIFO)** para armazenar os nós a serem processados.
-   - Em um grafo ou árvore, no pior caso, a fila pode conter todos os nós de um mesmo nível antes de avançar para o próximo.
+1. **Estrutura usada**:  
+   - O A* utiliza uma **fila de prioridade** que armazena os nós a serem explorados, ordenados pelo custo total `f(n)`.
+   - Cada nó precisa armazenar informações como o custo acumulado `g(n)`, o valor da heurística `h(n)` e o nó pai para reconstrução do caminho.
 
-2. **Complexidade de memória**:
-   - Se o número máximo de nós em um nível for \( b^d \), onde \( b \) é o fator de ramificação (número médio de filhos por nó) e \( d \) é a profundidade atual, o consumo de memória será proporcional a \( O(b^d) \).
+2. **Complexidade de memória**:  
+   - O consumo de memória depende da quantidade total de nós explorados e armazenados na fila, sendo proporcional a `O(b^d)`, onde:
+     - `b`: Fator de ramificação (número médio de filhos por nó).
+     - `d`: Profundidade do nó objetivo.
 
-3. **Impacto prático**:
-   - Em grafos ou árvores com alto fator de ramificação (\( b \)) e profundidade limitada, o BFS pode consumir **muita memória**, pois mantém vários nós simultaneamente na fila.
+3. **Impacto prático**:  
+   - Como o A* mantém mais informações (custos `g(n)` e `h(n)`, ele pode consumir significativamente mais memória do que algoritmos que não acumulam esse histórico.
 
 ---
 
-#### **Busca em Profundidade (DFS)**
-O consumo de memória do DFS é determinado pela **pilha de recursão** ou pela pilha explícita utilizada na versão iterativa. 
+#### **Busca Gulosa (GBS)**  
+O consumo de memória da Busca Gulosa é menor porque ela prioriza apenas o cálculo da heurística `h(n)`, sem considerar o custo acumulado `g(n)`.
 
-1. **Estrutura usada**:
-   - O DFS utiliza uma **pilha (LIFO)**, seja por meio de recursão ou explicitamente.
+1. **Estrutura usada**:  
+   - A Busca Gulosa também utiliza uma **fila de prioridade**, mas ordena os nós exclusivamente pelo valor da heurística `h(n)`, sem armazenar custos acumulados.
 
-2. **Complexidade de memória**:
-   - A memória consumida é proporcional à **profundidade máxima da árvore ou grafo** explorada pelo algoritmo. Isso corresponde a \( O(d) \), onde \( d \) é a profundidade máxima do grafo ou árvore.
+2. **Complexidade de memória**:  
+   - O consumo é proporcional a `O(b^d)`, similar ao A*, mas com menos informações armazenadas por nó, tornando o uso de memória mais eficiente.
 
-3. **Impacto prático**:
-   - O DFS consome **menos memória** em comparação com o BFS em cenários onde o grafo ou árvore possui uma grande largura (\( b \)) mas é relativamente profundo.
+3. **Impacto prático**:  
+   - Em problemas simples ou com heurísticas muito boas, a Busca Gulosa consome consideravelmente menos memória do que o **A***, pois descarta informações relacionadas ao custo acumulado.
 
 ---
 
 ### Diferenças no Consumo de Memória
 
-| Característica          | BFS                           | DFS                           |
+| Característica          | A*                            | Busca Gulosa (GBS)            |
 |-------------------------|-------------------------------|-------------------------------|
-| **Estrutura de dados**  | Fila (FIFO)                  | Pilha (LIFO) ou recursão      |
-| **Consumo de memória**  | \( O(b^d) \)                 | \( O(d) \)                   |
-| **Maior impacto**       | Grafo com alta largura        | Grafo com alta profundidade   |
-| **Escalabilidade**      | Menos escalável em grafos muito amplos | Mais escalável para grafos amplos |
+| **Estrutura de dados**  | Fila de prioridade            | Fila de prioridade            |
+| **Consumo de memória**  | `O(b^d)`, com custos `g(n)` e `h(n)` | `O(b^d)`, apenas `h(n)` |
+| **Armazenamento por nó**| Mais informações (pai, `(g(n)`, `h(n))` | Menos informações `h(n)` |
+| **Maior impacto**       | Mais memória em problemas complexos | Menos memória em todos os casos |
+| **Escalabilidade**      | Menos escalável devido ao maior consumo | Mais escalável em termos de memória |
 
 ---
 
-### Comentários sobre as Diferenças
+### Comparação dos Resultados de Consumo de Memória
 
-1. **BFS**:
-   - Consome mais memória em situações onde o grafo ou árvore tem **muitos nós no mesmo nível**.
-   - É mais adequado para encontrar caminhos mais curtos, pois explora por níveis.
+Os testes foram realizados utilizando o mesmo mapa (proposto no trabalho) em um notebook *ACER Nitro 5* (GTX 1650 - Intel Core i5 - 16GB RAM). Os consumos médios de memória medidos foram:
 
-2. **DFS**:
-   - Usa menos memória, especialmente em grafos profundos e com poucos caminhos paralelos.
-   - É ideal para explorar profundamente cada caminho antes de retroceder.
-
-3. **Conclusão Prática**:
-   - Se a memória disponível é limitada, o DFS geralmente é uma escolha melhor.
-   - O BFS pode ser inviável em grafos muito amplos devido ao alto consumo de memória.
+- **A*** → 476 bytes de memória.  
+- **Busca Gulosa** → 340 bytes de memória.  
 
 ---
 
-### Consumo de Memória
+### Conclusões
 
-Utilizando o mesmo mapa para as duas buscas (mapa proposto no trabalho) o consumo de memória dos dois algoritmos de busca foi distinto, porém não muito distante. Entretanto, essa diferença pode chegar a conclusões acerca da eficiência de cada um dos tipos de buscas. 
+1. **Eficiência da Busca Gulosa (GBS):**
+   - A GBS consome significativamente menos memória porque armazena apenas os valores da heurística `h(n)`, sem calcular ou guardar o custo acumulado `g(n)`.
 
-Os testes foram feitos num notebook *ACER Nitro 5*(GTX 1650 - Intel Core i5 i5 - 16gb ram).
+2. **Impacto em Cenários Maiores:**
+   - Em grafos maiores, a diferença de consumo tende a ser ainda mais significativa, pois cada nó no A* exige armazenamento adicional para cálculos de `g(n)` e `h(n)`.
+   - A GBS se torna mais escalável em termos de memória, especialmente em problemas com um grande fator de ramificação `(b)`.
 
--  **DFS** -> 368 bytes de memória.
--  **BFS** -> 384 bytes de memória.
+3. **Escolha do Algoritmo:**
+   - **A*** é preferível quando a precisão do caminho mais curto é crucial, mesmo que isso exija maior consumo de memória.
+   - **Busca Gulosa** é uma escolha mais eficiente para problemas menos complexos ou quando a memória disponível é limitada.
 
-
-1. **Diferença de Consumo de Memória em Cenários Maiores**:
-   - Embora a diferença de **16 bytes (384 - 368)** pareça pequena neste exemplo, em grafos maiores, essa diferença tende a crescer significativamente.
-   - Isso ocorre devido à natureza do BFS, que armazena mais estados na fila conforme o grafo cresce em largura.
-
-2. **Escalabilidade do Consumo**:
-   - O **BFS** consome memória proporcional ao maior nível completo do grafo \( b^d \), onde:
-     - \( b \): Fator de ramificação (número médio de filhos por nó).
-     - \( d \): Profundidade do nível atual.
-   - O **DFS**, por outro lado, consome memória proporcional à profundidade total do grafo (\( d \)).
-
-3. **Escolha do Algoritmo**:
-   - **DFS** seria mais eficiente em termos de memória em grafos amplos e profundos, onde a largura (\( b \)) é muito maior que a profundidade (\( d \)).
-   - **BFS** pode ser vantajoso para problemas que exigem exploração por níveis ou busca do caminho mais curto, mas consome mais memória à medida que a largura do grafo aumenta.
-  
 ## Completude ✅​
 
-O **DFS** é:
-- Completo em espaços de estados finitos.
-- Não completo em espaços de estados infinitos, pois pode ficar preso em um ramo sem fim, sem explorar outros.
+O **A*** é:
+- Completo, desde que:
+  - O espaço de estados seja finito.
+  - A heurística seja admissível (não superestime o custo real).
+  - Os custos das arestas sejam positivos.
 
-O **BFS** é:
-- O espaço de estados (grafo ou árvore) seja finito.
-- A solução seja alcançável.
+A **Busca Gulosa (GBS)** é:
+- Não completa em geral, porque:
+  - Pode entrar em loops ou ficar presa em caminhos subótimos, dependendo da qualidade da heurística.
+  - Não considera o custo acumulado, o que pode levar à exploração de caminhos que nunca alcançam a solução.
 
-### Comparação entre BFS e DFS na Completude
+### Comparação entre A* e Busca Gulosa na Completude
 
-| Algoritmo | É Completo?                                      | Condição de Completude                                                                 |
-|-----------|--------------------------------------------------|---------------------------------------------------------------------------------------|
-| **BFS**   | Sim                                              | Desde que o grafo seja finito e a solução seja alcançável.                            |
-| **DFS**   | Sim (em grafos finitos) / Não (em grafos infinitos) | Necessário evitar loops infinitos ou explorar ramos infinitamente profundos.         |
+| Algoritmo    | É Completo?                                     | Condição de Completude                                                                   |
+|--------------|-------------------------------------------------|-----------------------------------------------------------------------------------------|
+| **A***       | Sim                                             | Desde que o grafo seja finito, a heurística seja admissível e os custos sejam positivos. |
+| **GBS**      | Não                                             | Pode não ser completo devido à dependência exclusiva da heurística e à possibilidade de loops. |
 
-``No mapa (labirinto) proposto ambos os algoritmos de busca desempenham papel satisfatório e conseguem ser completos. ``
+``No mapa (labirinto) proposto, ambos os algoritmos encontraram uma solução, porém, dependendo da área de busca, uma busca Gulosa pode não encontrar um caminho.``
+
 
 ## Optimalidade 🚩
 
@@ -166,37 +167,37 @@ O BFS encontrou o caminho mais curto, porém gastou mais memória para isso, ou 
 
 ## Análise Comparativa
 
-| Critério         | BFS                                    | DFS                                    |
-|------------------|----------------------------------------|----------------------------------------|
-| **Tempo de Execução** | Eficiente para encontrar o menor caminho.   | Pode ser mais rápido em alguns cenários, mas depende da ordem dos nós. |
-| **Consumo de Memória** | Alto em grafos amplos.                      | Baixo, mas pode aumentar em grafos com alta profundidade.             |
-| **Completude**    | Sempre encontra a solução (grafo finito).      | Completo apenas em grafos finitos.                                    |
-| **Optimalidade**  | Garante o menor caminho (grafo não ponderado). | Não garante o menor caminho.                                          |
+| Critério         | A*                                     | Busca Gulosa (GBS)                      |
+|------------------|----------------------------------------|-----------------------------------------|
+| **Tempo de Execução** | Mais lento devido ao uso de heurística e custo acumulado. | Geralmente mais rápido, mas depende da heurística. |
+| **Consumo de Memória** | Alto devido ao armazenamento de nós abertos e fechados. | Baixo, pois armazena apenas os nós mais promissores. |
+| **Completude**    | Sempre encontra a solução (se condições forem satisfeitas). | Não garante encontrar a solução em alguns casos.    |
+| **Optimalidade**  | Garante o caminho mais curto (com heurística admissível). | Não garante o caminho mais curto.                   |
 
 ---
 
 ## Conclusões Finais
 
-1. **BFS é mais adequado para problemas que exigem a solução mais curta**:
-   - É ideal para cenários em que a eficiência e a optimalidade são fundamentais, como busca de caminhos em redes não ponderadas.
+1. **A* é mais adequado para problemas que exigem solução ótima**:
+   - Ideal para cenários onde a precisão no menor caminho é essencial, como navegação GPS ou jogos baseados em mapas.
 
-2. **DFS é útil em problemas que exigem exploração completa**:
-   - Pode ser mais eficiente em grafos com baixa profundidade ou em situações onde qualquer solução é aceitável, mesmo que não seja a melhor.
+2. **Busca Gulosa é útil em problemas que exigem rapidez**:
+   - Pode ser eficiente em situações onde o objetivo é chegar a uma solução rápida, mesmo que não seja a melhor.
 
-3. **Impacto da Estrutura do Grafo**:
-   - A eficiência de ambos os algoritmos depende fortemente das características do grafo, como largura, profundidade e presença de ciclos.
+3. **Impacto da Heurística**:
+   - Ambos os algoritmos dependem fortemente da qualidade da heurística utilizada, mas o A* equilibra o custo acumulado e a estimativa, tornando-o mais robusto.
 
 ---
 
 ## Possíveis Melhorias
 
-1. **Melhorias no BFS**:
-   - Implementar estratégias para reduzir o consumo de memória, como podar nós irrelevantes.
-   - Aplicar heurísticas para priorizar caminhos mais promissores (ex.: A*).
+1. **Melhorias no A***:
+   - Reduzir o consumo de memória com técnicas como *Iterative Deepening A***.
+   - Refinar a heurística para balancear melhor a eficiência e a precisão.
 
-2. **Melhorias no DFS**:
-   - Adicionar controle de estados visitados para evitar loops em grafos com ciclos.
-   - Modificar o algoritmo para interromper a exploração de caminhos desnecessários, melhorando sua eficiência.
+2. **Melhorias na Busca Gulosa**:
+   - Introduzir verificações para evitar loops e caminhos subótimos.
+   - Combinar com outros métodos para melhorar a completude e a robustez em grafos complexos.
 
 
 ## 🚀 Como Executar
