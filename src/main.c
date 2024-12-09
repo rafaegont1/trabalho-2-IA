@@ -61,10 +61,14 @@ int main()
     // put starting cell into the priority queue
     current.idx = CHAR2INT(START_CELL);
 #if defined(A_STAR)
+    printf("___A*___\n");
+
     current.score.g = 0;
     current.score.h = manhattan_distance(current.idx, CHAR2INT(GOAL_CELL));
     current.score.f = current.score.g + current.score.h;
 #elif defined(GBS)
+    printf("___Greedy Best-First Searc___h\n");
+
     current.score = manhattan_distance(current.idx, CHAR2INT(GOAL_CELL));
 #endif
     p_queue_set(&pq, current);
@@ -113,7 +117,8 @@ int main()
         printf("Failed to find goal (%c cell)\n", GOAL_CELL);
     }
     printf("Time spent: %lld ns\n", delta_ns(start, end));
-    size_t nodes_size = sizeof(p_queue_node_t) * pq.base.nodes_allocated;
+    size_t nodes_size = (sizeof(p_queue_node_t) + sizeof(score_t))
+                        * pq.base.nodes_allocated;
     printf("Memory spend with nodes allocated: %ld bytes\n", nodes_size);
 
     matrix_print_path(matrix);

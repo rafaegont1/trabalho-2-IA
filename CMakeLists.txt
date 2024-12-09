@@ -12,7 +12,7 @@ set(CMAKE_C_STANDARD 11)
 
 # Adding macro definitions for debug
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_definitions(-DDEBUG -DA_STAR -DGBS)
+    add_definitions(-DDEBUG)
 endif()
 
 # Include headers from the 'include' directory
@@ -25,24 +25,19 @@ add_executable(a_star
     src/matrix.c
     src/p_queue.c
 )
+# Define macro for A_STAR only for a_star executable
 target_compile_definitions(a_star PRIVATE A_STAR)
 
-# Create A_STAR executable
+# Create GBS executable
 add_executable(gbs
     src/main.c
     src/util.c
     src/matrix.c
     src/p_queue.c
 )
+# Define macro for GBS only for gbs executable
 target_compile_definitions(gbs PRIVATE GBS)
 
 # Add compilation flags (apply to both executables)
 target_compile_options(a_star PRIVATE -Wall -Wextra)
 target_compile_options(gbs PRIVATE -Wall -Wextra)
-
-# If you want to ensure that the executables are built in debug/release mode
-# you can add build type specific options:
-# if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-#     target_compile_options(dfs PRIVATE -g)
-#     target_compile_options(bfs PRIVATE -g)
-# endif()
