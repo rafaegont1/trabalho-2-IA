@@ -1,5 +1,6 @@
-# Algoritmos A* e Guloso
-Este projeto implementa os algoritmos de **Busca A*** e **Busca Gulosa**, desenvolvidos em C. Este README explica como cada algoritmo funciona e apresenta as principais diferenças entre eles. 
+# Estratégia de busca informada (heurística)
+
+São implementados, neste repositório, os algoritmos de **Busca A*** e **Busca gulosa de melhor escolha**, desenvolvidos em C. Este README explica como cada algoritmo funciona e apresenta as principais diferenças entre eles.
 
 ---
 
@@ -234,8 +235,3 @@ ou
 ```bash
 ./bsf
 ```
-
-
-
-
-
