@@ -213,7 +213,7 @@ Siga os passos abaixo para compilar e executar o projeto:
 1. Clone o repositório:
 
    ```bash
-   git clone https://github.com/rafaegont1/trabalho-1-IA
+   git clone https://github.com/rafaegont1/trabalho-2-IA
    cd <nome-do-repositorio>
 3. Configure o projeto: Crie uma pasta para os arquivos de compilação e configure o projeto com o CMake:
 
