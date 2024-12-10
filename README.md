@@ -155,13 +155,18 @@ O menor caminho no labirinto proposto seria o representado na imagem abaixo:
 
 ### ``A sequência do menor caminho seria: U -> V -> Q -> L -> M -> N -> I-> H -> C -> D -> E``
 
-O CAMINHO DO **DFS**:
-- U -> V -> W -> X -> Y -> T -> S -> R -> M -> N -> I -> H -> C -> D -> E
+O CAMINHO DO **A***:
+- U -> V -> Q -> L -> M -> N -> I-> H -> C -> D -> E
 
-O CAMINHO DO **BFS**:
-- U -> V -> Q -> L -> M -> N -> I -> H -> C -> D -> E
+O CAMINHO DO **GBS**:
+- U -> V -> Q -> L -> M -> N -> I-> H -> C -> D -> E
 
-O BFS encontrou o caminho mais curto, porém gastou mais memória para isso, ou seja, em questão de optimalidade, o BFS tem melhor desempenho que o DFS.
+Ambos os métodos de busca, **A*** e **Busca Gulosa (GBS)**, conseguiram encontrar o melhor caminho no labirinto utilizado para os testes. A principal diferença observada foi no **tempo de execução** e no **consumo de memória**. Como o labirinto de teste possui poucos "vértices" (posições possíveis), e os dois algoritmos compartilham algumas semelhanças na forma como exploram os estados, os resultados foram **próximos em termos de solução encontrada**.
+
+Entretanto, em **aplicações reais** e cenários mais complexos, o algoritmo **A*** se destaca por sua **maior optimalidade**. Isso ocorre porque o A* utiliza tanto o **custo acumulado do caminho já percorrido** quanto uma **heurística para estimar o custo até o objetivo**. Essa abordagem torna o A* mais **robusto e confiável** na busca pelo menor caminho, especialmente em grafos maiores e com custos variados.
+
+Por outro lado, a **Busca Gulosa** depende **exclusivamente da heurística**, sem considerar o custo acumulado, o que pode levar a **escolhas subótimas** em cenários complexos. Assim, enquanto o GBS pode ser vantajoso em termos de **velocidade** e **consumo de memória**, o **A*** é a melhor escolha para garantir **soluções otimizadas** e mais precisas.
+
 
 ## Conclusões 🤝
 
